@@ -1,0 +1,13 @@
+{
+  "name": "@spec-review/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p . && node esbuild.mjs",
+    "test": "npm run build && node --test \"out/test/**/*.test.js\""
+  },
+  "dependencies": {
+    "@spec-review/core": "*"
+  }
+}
