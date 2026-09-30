@@ -1,0 +1,27 @@
+{
+  "name": "vscode-spec-review",
+  "displayName": "Spec Review",
+  "description": "Review Markdown documents written by AI agents: comments, revisions and diffs like a pull request",
+  "version": "0.1.0",
+  "publisher": "navoff",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "vscode": "^1.96.0" },
+  "categories": ["Other"],
+  "keywords": ["review", "markdown", "spec", "claude", "codex"],
+  "icon": "resources/icon.png",
+  "main": "./dist/extension.cjs",
+  "scripts": {
+    "build": "tsc -p . && node esbuild.mjs",
+    "test": "tsc -p . && node --test \"out/test/**/*.test.js\"",
+    "package": "npm run build --prefix ../.. && vsce package --no-dependencies"
+  },
+  "contributes": {},
+  "dependencies": {
+    "@spec-review/core": "*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@vscode/vsce": "^3.2.1"
+  }
+}
