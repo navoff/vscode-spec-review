@@ -96,7 +96,9 @@
     "@spec-review/core": "*"
   },
   "devDependencies": {
+    "@types/jsdom": "^30.0.0",
     "@types/vscode": "^1.96.0",
-    "@vscode/vsce": "^3.2.1"
+    "@vscode/vsce": "^3.2.1",
+    "jsdom": "^29.1.1"
   }
 }

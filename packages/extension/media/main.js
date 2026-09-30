@@ -131,7 +131,7 @@
       const exact = lined().filter((n) => line(n) <= startLine && lineEnd(n) > startLine).pop();
       if (exact) return exact.closest("li, p, table, pre, blockquote, h1, h2, h3, h4, details, .note") || exact;
     }
-    return doc.querySelector(`section[data-section="${CSS.escape(section)}"]`) || doc;
+    return [...doc.querySelectorAll("section.card")].find((c) => c.getAttribute("data-section") === section) || doc;
   }
 
   function placeThreads() {
