@@ -6,9 +6,19 @@
   "publisher": "navoff",
   "license": "MIT",
   "type": "module",
-  "engines": { "vscode": "^1.96.0" },
-  "categories": ["Other"],
-  "keywords": ["review", "markdown", "spec", "claude", "codex"],
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "review",
+    "markdown",
+    "spec",
+    "claude",
+    "codex"
+  ],
   "icon": "resources/icon.png",
   "main": "./dist/extension.cjs",
   "scripts": {
@@ -16,7 +26,72 @@
     "test": "tsc -p . && node --test \"out/test/**/*.test.js\"",
     "package": "npm run build --prefix ../.. && vsce package --no-dependencies"
   },
-  "contributes": {},
+  "contributes": {
+    "commands": [
+      {
+        "command": "specReview.open",
+        "title": "Open in Spec Review",
+        "category": "Spec Review",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "specReview.installSkill",
+        "title": "Install Agent Skill",
+        "category": "Spec Review"
+      },
+      {
+        "command": "specReview.comment",
+        "title": "Comment on Selection",
+        "category": "Spec Review"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "specReview.open",
+          "when": "resourceExtname == .md",
+          "group": "navigation@9"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "specReview.open",
+          "when": "resourceExtname == .md",
+          "group": "navigation@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "specReview.comment",
+          "when": "activeWebviewPanelId == specReview.panel"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "specReview.comment",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "activeWebviewPanelId == specReview.panel"
+      }
+    ],
+    "configuration": {
+      "title": "Spec Review",
+      "properties": {
+        "specReview.skillTargets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "~/.claude/skills",
+            "~/.codex/skills"
+          ],
+          "description": "Directories the agent skill is copied into by \"Install Agent Skill\". A spec-review folder is created inside each."
+        }
+      }
+    }
+  },
   "dependencies": {
     "@spec-review/core": "*"
   },
