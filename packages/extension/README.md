@@ -10,7 +10,7 @@ you end up copying paragraphs into the chat. Spec Review keeps comments,
 replies and revision snapshots on disk next to the document, so the agent
 reads them itself and the extension can diff what it did.
 
-![The Spec Review panel: a rendered document with section cards, a resolved thread, a fixed thread with the agent's reply, change bars and the table of contents with thread counts](https://raw.githubusercontent.com/navoff/vscode-spec-review/main/media/screenshot.png)
+![Spec Review in action: commenting on a rendered document, sending the review to the agent, and seeing the agent's replies and the changed sections of the new revision](https://raw.githubusercontent.com/navoff/vscode-spec-review/main/media/demo.gif)
 
 ## Features
 
