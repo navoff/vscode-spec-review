@@ -2,6 +2,8 @@
 
 A VS Code extension for reviewing Markdown documents written by an AI agent the way a pull request is reviewed: a rendered document, comments anchored to the text, the agent's replies, revisions and a diff between them. The user-facing description lives in [packages/extension/README.md](packages/extension/README.md).
 
+![The Spec Review panel: a rendered document with section cards, a resolved thread, a fixed thread with the agent's reply, change bars and the table of contents with thread counts](media/screenshot.png)
+
 Packages:
 
 - `packages/core` - the `.spec-review/` store, Markdown parsed into line-mapped blocks, revision diffs, relocating a comment by its quote. No VS Code dependency.
