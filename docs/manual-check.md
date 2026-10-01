@@ -34,7 +34,7 @@ Before a release, go through this list in "Run Extension" on a document with sev
 
 ## Finish review
 
-- [ ] The button is hidden on a freshly opened document, disabled while a thread is unresolved or a section is not viewed, and enabled otherwise.
+- [ ] The button is hidden on a freshly opened document; while a thread is unresolved or a section is not viewed it shows a warning mark, the hover names what is left, and the confirmation asks "Are you sure?".
 - [ ] After confirmation the document's `.spec-review` directory and its empty parents are gone and the panel looks freshly opened.
 
 ## Errors

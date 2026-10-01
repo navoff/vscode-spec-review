@@ -32,7 +32,7 @@ type Incoming =
   | { type: "approve"; approved: boolean }
   | { type: "openRevision"; revision: number }
   | { type: "copyPrompt" }
-  | { type: "finishReview" };
+  | { type: "finishReview"; warning?: string };
 
 export class ReviewPanel {
   private static readonly panels = new Map<string, ReviewPanel>();
@@ -178,8 +178,9 @@ export class ReviewPanel {
         return;
       case "finishReview": {
         const name = basename(this.store.docPath);
+        const leftovers = m.warning ? `${m.warning[0].toUpperCase()}${m.warning.slice(1)} left. Are you sure? ` : "";
         const choice = await vscode.window.showWarningMessage(
-          `Finish the review of ${name}? All revisions, comment threads and viewed marks will be deleted; the document itself is kept.`,
+          `${leftovers}Finish the review of ${name}? All revisions, comment threads and viewed marks will be deleted; the document itself is kept.`,
           { modal: true },
           "Finish review",
         );

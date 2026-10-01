@@ -22,7 +22,7 @@ button.pill.neutral { color: var(--vscode-button-secondaryForeground); backgroun
 button.pill.neutral:hover { background: var(--vscode-button-secondaryHoverBackground); }
 button.pill.finish { color: #fff; background: #2ea043; }
 button.pill.finish:hover { background: #3fb950; }
-button.pill.finish:disabled { color: var(--vscode-disabledForeground); background: var(--vscode-button-secondaryBackground); cursor: default; }
+button.pill.finish.warn .mark { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: #fff; color: #b54708; font-weight: 700; font-size: 12px; line-height: 1; }
 button.secondary { color: var(--vscode-button-secondaryForeground); background: var(--vscode-button-secondaryBackground); }
 select, textarea { font: inherit; color: var(--vscode-input-foreground); background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, transparent); }
 textarea { width: 100%; min-height: 60px; box-sizing: border-box; margin-top: 6px; }

@@ -232,7 +232,7 @@ test("h3 entries in the table of contents inherit the viewed mark of their secti
   ]);
 });
 
-test("Finish review is hidden on a fresh document and disabled while issues are open", () => {
+test("Finish review is hidden on a fresh document and warns while something is left", () => {
   const finish = (dom: JSDOM) => [...dom.window.document.querySelectorAll("#head button")].find((b) => b.textContent?.includes("Finish review")) as HTMLButtonElement | undefined;
   assert.equal(finish(page(model({ revision: 1, baseRevision: 1, threads: [] })).dom), undefined);
   const openThread = {
@@ -245,8 +245,13 @@ test("Finish review is hidden on a fresh document and disabled while issues are 
     messages: [{ author: "user" as const, at: "2026-09-30T10:00:00.000Z", text: "x" }],
   };
   const allViewed = model().sections.map((s) => ({ ...s, viewed: true }));
-  assert.equal(finish(page(model({ threads: [openThread], counts: { open: 1, answered: 0, accepted: 0 }, sections: allViewed })).dom)?.disabled, true);
-  assert.equal(finish(page(model({ threads: [{ ...openThread, state: "answered" }], counts: { open: 0, answered: 1, accepted: 0 }, sections: allViewed })).dom)?.disabled, true);
-  assert.equal(finish(page(model({ revision: 2 })).dom)?.disabled, true, "section B is not viewed");
-  assert.equal(finish(page(model({ revision: 2, sections: allViewed })).dom)?.disabled, false);
+  const withIssue = finish(page(model({ threads: [openThread], counts: { open: 1, answered: 0, accepted: 0 }, sections: allViewed })).dom);
+  assert.equal(withIssue?.disabled, false);
+  assert.ok(withIssue?.querySelector(".mark"), "a warning mark while an issue is unresolved");
+  assert.match(withIssue?.title ?? "", /1 unresolved issue left/);
+  const unviewed = finish(page(model({ revision: 2 })).dom);
+  assert.ok(unviewed?.querySelector(".mark"), "a warning mark while a section is not viewed");
+  assert.match(unviewed?.title ?? "", /1 section not viewed/);
+  const clean = finish(page(model({ revision: 2, sections: allViewed })).dom);
+  assert.equal(clean?.querySelector(".mark"), null);
 });

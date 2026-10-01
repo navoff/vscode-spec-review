@@ -81,12 +81,15 @@
     // Finishing needs every thread resolved and every section viewed.
     const unresolved = model.counts.open + model.counts.answered;
     const unviewed = model.sections.filter((s) => !s.viewed).length;
-    const blocked = unresolved > 0 || unviewed > 0;
     const reasons = [];
     if (unresolved > 0) reasons.push(`${unresolved} unresolved issue${unresolved === 1 ? "" : "s"}`);
     if (unviewed > 0) reasons.push(`${unviewed} section${unviewed === 1 ? "" : "s"} not viewed`);
-    const title = blocked ? `${reasons.join(", ")} left` : "Delete all revisions and threads and start over from the current text";
-    return [el("button", { class: "pill finish", disabled: blocked, title, onclick: () => post({ type: "finishReview" }) }, thumbIcon(), "Finish review")];
+    const warning = reasons.length > 0 ? reasons.join(" and ") : "";
+    // Still clickable with leftovers: the button shows a warning mark and the host asks for confirmation.
+    const title = warning ? `${warning} left. Delete all revisions and threads anyway?` : "Delete all revisions and threads and start over from the current text";
+    const button = el("button", { class: `pill finish${warning ? " warn" : ""}`, title, onclick: () => post({ type: "finishReview", warning }) }, thumbIcon(), "Finish review");
+    if (warning) button.append(el("span", { class: "mark", "aria-label": "warning" }, "!"));
+    return [button];
   }
 
   function renderDoc() {
