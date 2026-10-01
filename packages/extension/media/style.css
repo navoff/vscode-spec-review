@@ -1,6 +1,6 @@
 :root { --gap: 12px; }
-body { margin: 0; display: grid; grid-template-columns: 240px 1fr; height: 100vh; font-family: var(--vscode-font-family); font-size: var(--vscode-font-size, 13px); color: var(--vscode-foreground); background: var(--vscode-editor-background); }
-#toc { border-right: 1px solid var(--vscode-panel-border); overflow: auto; padding: var(--gap); font-size: 12px; }
+body { margin: 0; display: grid; grid-template-columns: 1fr 240px; height: 100vh; font-family: var(--vscode-font-family); font-size: var(--vscode-font-size, 13px); color: var(--vscode-foreground); background: var(--vscode-editor-background); }
+#toc { order: 2; border-left: 1px solid var(--vscode-panel-border); overflow: auto; padding: var(--gap); font-size: 12px; }
 #toc a { display: flex; align-items: center; gap: 6px; color: var(--vscode-foreground); text-decoration: none; padding: 2px 4px; border-radius: 3px; }
 #toc a:hover { background: var(--vscode-list-hoverBackground); }
 #toc a .title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -15,7 +15,7 @@ reads them itself and the extension can diff what it did.
 ## Features
 
 - **Rendered review panel.** Each `##` section is a card with a "viewed"
-  mark, a table of contents on the left and reading progress on top.
+  mark, a table of contents on the right and reading progress on top.
   Tables, code, `{% cut %}` and `{% note %}` blocks are rendered.
 - **Anchored comment threads.** Select text, press `Ctrl+Shift+M`, write
   the comment. The thread hangs under that block. Remarks about the
