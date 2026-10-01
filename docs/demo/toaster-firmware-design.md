@@ -6,6 +6,7 @@ The toaster must toast bread, predict its owner's mood and under no circumstance
 
 - Toast bread to one of five levels: `pale`, `golden`, `brown`, `carbon`, `philosophical`.
 - Detect the owner's mood from how hard the lever is pressed.
+- Control the toaster over Bluetooth LE from the phone app: start and cancel toasting, pick the level and read the current state.
 - Send a Telegram notification when the toast is ready, and one to the police when it has burnt.
 
 ## Architecture
@@ -14,7 +15,7 @@ The firmware consists of three modules that talk through the `bread_msgq` messag
 
 ### Heating module
 
-Drives the coil through PWM. The temperature is read from the thermocouple every **50 ms** and smoothed with a first-order filter.
+Drives the coil through PWM. The temperature is read from the thermocouple every **100 ms** and smoothed with a first-order filter.
 
 ```c
 static int heat_tick(struct toaster *t)
@@ -44,18 +45,29 @@ The police notification goes through an SMS modem. Make sure the number is not c
 
 ## Recipe storage
 
-Recipes live in flash as TLV records. A recipe is a toasting level, a time and the owner's name. At most 16 recipes: a toaster should not have more owners than that.
+Recipes live in flash as Protocol Buffers messages encoded with nanopb, each prefixed with its length as a varint. A recipe is a toasting level, a time and the owner's name. At most 16 recipes: a toaster should not have more owners than that.
 
 {% cut "Record format" %}
 
-```text
-+------+------+----------------+
-| tag  | len  | value          |
-| 1 B  | 1 B  | len bytes      |
-+------+------+----------------+
+```proto
+syntax = "proto3";
+
+enum Level {
+  PALE = 0;
+  GOLDEN = 1;
+  BROWN = 2;
+  CARBON = 3;
+  PHILOSOPHICAL = 4;
+}
+
+message Recipe {
+  Level level = 1;
+  uint32 time_s = 2;  // toasting time in seconds
+  string owner = 3;   // owner's name, UTF-8, at most 32 bytes (nanopb max_size)
+}
 ```
 
-Tags: `0x01` - level, `0x02` - time in seconds, `0x03` - owner's name in UTF-8.
+Records are written one after another: a varint length, then the encoded `Recipe`. Unknown fields are skipped on read, so new fields can be added without migrating the flash.
 
 {% endcut %}
 
