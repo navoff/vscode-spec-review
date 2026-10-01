@@ -49,14 +49,14 @@
       "explorer/context": [
         {
           "command": "specReview.open",
-          "when": "resourceExtname == .md",
+          "when": "resourceLangId == markdown || resourceExtname == .md",
           "group": "navigation@9"
         }
       ],
       "editor/title": [
         {
           "command": "specReview.open",
-          "when": "resourceExtname == .md",
+          "when": "resourceLangId == markdown || resourceExtname == .md",
           "group": "navigation@1"
         }
       ],
@@ -64,6 +64,20 @@
         {
           "command": "specReview.comment",
           "when": "activeWebviewPanelId == specReview.panel"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "specReview.open",
+          "when": "resourceLangId == markdown || resourceExtname == .md",
+          "group": "navigation@1"
+        }
+      ],
+      "webview/context": [
+        {
+          "command": "specReview.comment",
+          "when": "webviewId == specReview.panel",
+          "group": "navigation@1"
         }
       ]
     },

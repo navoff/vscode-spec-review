@@ -21,3 +21,8 @@ test("relocate picks the occurrence nearest to the original line", () => {
 test("relocate returns undefined when the quote is gone", () => {
   assert.equal(relocate({ ...base, startLine: 0, endLine: 1, quote: "gone" }, "still here\n"), undefined);
 });
+
+test("relocate matches a quote taken from rendered text against inline Markdown", () => {
+  const text = "# T\n\nPress `Ctrl+Shift+M` to **comment** on it.\n";
+  assert.deepEqual(relocate({ ...base, startLine: 2, endLine: 3, quote: "Press Ctrl+Shift+M to comment" }, text), { startLine: 2, endLine: 3 });
+});

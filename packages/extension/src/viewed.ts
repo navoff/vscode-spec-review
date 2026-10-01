@@ -6,7 +6,11 @@ export async function syncViewed(store: ReviewStore): Promise<Viewed> {
   const meta = await store.readMeta();
   if (!meta) return { revision: 0, sections: [] };
   let viewed = await store.readViewed();
-  if (viewed.revision === 0) viewed = { revision: meta.revision, sections: [] };
+  // A file written before any sync (or by an older build) carries revision 0: its marks belong to the current revision.
+  if (viewed.revision === 0) {
+    viewed = { revision: meta.revision, sections: viewed.sections };
+    await store.writeViewed(viewed);
+  }
   if (viewed.revision >= meta.revision) return viewed;
   let text = await store.readRevision(viewed.revision);
   for (let r = viewed.revision + 1; r <= meta.revision; r++) {

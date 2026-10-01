@@ -81,3 +81,17 @@ test("a thread whose quote is gone is outdated but keeps its section", async () 
   assert.equal(vm.threads[0].lines, null);
   assert.equal(vm.threads[0].section, "A");
 });
+
+test("a document without review data renders as revision 1 and writes nothing", async () => {
+  const root = await mkdtemp(join(tmpdir(), "sr-ext-"));
+  await mkdir(join(root, ".git"));
+  const doc = join(root, "a.md");
+  await writeFile(doc, "# T\n\n## A\n\na one\n");
+  const store = await ReviewStore.open(doc);
+  const vm = await buildViewModel(store);
+  assert.equal(vm.revision, 1);
+  assert.equal(vm.dirty, false);
+  assert.deepEqual(vm.threads, []);
+  assert.deepEqual(vm.changedBlocks, []);
+  assert.equal(await store.readMeta(), undefined);
+});

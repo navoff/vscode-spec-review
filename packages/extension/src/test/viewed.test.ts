@@ -31,3 +31,10 @@ test("syncViewed starts empty at the current revision", async () => {
   const { store } = await setup();
   assert.deepEqual(await syncViewed(store), { revision: 1, sections: [] });
 });
+
+test("syncViewed keeps marks written with revision 0 and stamps the current revision", async () => {
+  const { store } = await setup();
+  await store.writeViewed({ revision: 0, sections: ["A"] });
+  assert.deepEqual(await syncViewed(store), { revision: 1, sections: ["A"] });
+  assert.deepEqual(await store.readViewed(), { revision: 1, sections: ["A"] });
+});

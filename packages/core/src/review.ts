@@ -1,4 +1,7 @@
+import { readdir, rm, rmdir } from "node:fs/promises";
+import { basename, dirname } from "node:path";
 import { newId } from "./id.js";
+import { REVIEW_DIR } from "./paths.js";
 import type { ReviewStore } from "./store.js";
 import type { Anchor, Meta, Thread, Verdict } from "./types.js";
 
@@ -46,7 +49,8 @@ async function requireThread(store: ReviewStore, id: string): Promise<Thread> {
 }
 
 export async function addThread(store: ReviewStore, text: string, anchor?: Anchor): Promise<Thread> {
-  await requireMeta(store);
+  // The first comment is what creates the review data; opening the panel alone writes nothing.
+  await ensureInitialized(store);
   const at = now();
   const thread: Thread = { id: newId(), createdAt: at, state: "open", anchor, messages: [{ author: "user", at, text }] };
   await store.writeThread(thread);
@@ -75,6 +79,33 @@ export async function acceptThread(store: ReviewStore, id: string): Promise<Thre
   t.state = "accepted";
   await store.writeThread(t);
   return t;
+}
+
+/** The reviewer is not satisfied after all: the thread waits for the agent again. */
+export async function reopenThread(store: ReviewStore, id: string): Promise<Thread> {
+  const t = await requireThread(store, id);
+  t.state = "open";
+  await store.writeThread(t);
+  return t;
+}
+
+/** Forget everything about the document: revisions, threads, viewed marks. Nothing is written until the next comment.
+ * Parent directories that become empty are removed too, up to and including `.spec-review` itself. */
+export async function resetReview(store: ReviewStore): Promise<void> {
+  await rm(store.dir, { recursive: true, force: true });
+  let dir = dirname(store.dir);
+  for (;;) {
+    let entries: string[];
+    try {
+      entries = await readdir(dir);
+    } catch {
+      return;
+    }
+    if (entries.length > 0) return;
+    await rmdir(dir);
+    if (basename(dir) === REVIEW_DIR) return;
+    dir = dirname(dir);
+  }
 }
 
 export async function setApproved(store: ReviewStore, approved: boolean): Promise<void> {

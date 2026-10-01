@@ -5,17 +5,25 @@ export interface LineRange {
   endLine: number;
 }
 
+/** Inline Markdown punctuation that the rendered text (where quotes are selected) does not contain. */
+const MARKUP = new Set(["`", "*"]);
+
 function normalize(s: string): string {
-  return s.replace(/\s+/g, " ").trim();
+  return [...s]
+    .filter((ch) => !MARKUP.has(ch))
+    .join("")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-/** Collapse whitespace in the text while remembering which source line each kept character came from. */
+/** Collapse whitespace and drop inline markup in the text while remembering which source line each kept character came from. */
 function normalizeWithLines(text: string): { norm: string; lineOf: number[] } {
   let norm = "";
   const lineOf: number[] = [];
   let line = 0;
   let pendingSpace = false;
   for (const ch of text) {
+    if (MARKUP.has(ch)) continue;
     if (/\s/.test(ch)) {
       if (ch === "\n") line++;
       pendingSpace = norm.length > 0;

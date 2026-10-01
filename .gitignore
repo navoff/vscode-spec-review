@@ -7,3 +7,4 @@ out/
 docs/superpowers/
 .demo/
 skill/spec-review.mjs
+.spec-review/

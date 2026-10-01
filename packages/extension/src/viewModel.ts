@@ -43,10 +43,10 @@ export interface ViewModel {
 /** Everything the panel shows, computed from the store and the live document. With no explicit base,
  * unsnapshotted edits are compared against the latest revision, otherwise the latest against the one before. */
 export async function buildViewModel(store: ReviewStore, baseRevision?: number): Promise<ViewModel> {
-  const meta = await store.readMeta();
-  if (!meta) throw new Error(`No review data for ${store.docPath}`);
   const text = await store.readDocument();
-  const latest = await store.readRevision(meta.revision);
+  // Before the first comment there is no data on disk; the document itself stands for revision 1.
+  const meta = (await store.readMeta()) ?? { docPath: store.docPath, revision: 1, approved: false, revisions: {} };
+  const latest = Object.keys(meta.revisions).length === 0 ? text : await store.readRevision(meta.revision);
   const dirty = text !== latest;
   const base = baseRevision ?? (dirty ? meta.revision : Math.max(1, meta.revision - 1));
   const baseText = base === meta.revision ? latest : await store.readRevision(base);
