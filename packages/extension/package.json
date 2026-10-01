@@ -5,6 +5,14 @@
   "version": "0.1.0",
   "publisher": "navoff",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navoff/vscode-spec-review.git"
+  },
+  "homepage": "https://github.com/navoff/vscode-spec-review#readme",
+  "bugs": {
+    "url": "https://github.com/navoff/vscode-spec-review/issues"
+  },
   "type": "module",
   "engines": {
     "vscode": "^1.96.0"
